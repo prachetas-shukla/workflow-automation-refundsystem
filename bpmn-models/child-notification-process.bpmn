@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+                  xmlns:modeler="http://camunda.org/schema/modeler/1.0"
+                  id="Definitions_ChildNotification"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.49.0"
+                  modeler:executionPlatform="Camunda Cloud"
+                  modeler:executionPlatformVersion="8.9.0">
+  <bpmn:process id="Process_ChildNotification_PBL2" name="Reusable Customer Notification Child Process" isExecutable="true">
+    <bpmn:startEvent id="Start_ChildNotify" name="Notification&#10;Requested">
+      <bpmn:outgoing>Flow_Child_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:serviceTask id="Task_DispatchNotification" name="Dispatch Customer&#10;Webhook (REST Connector)" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="13">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="noAuth" target="authentication.type" />
+          <zeebe:input source="POST" target="method" />
+          <zeebe:input source="https://httpbin.org/post" target="url" />
+          <zeebe:input source="=false" target="storeResponse" />
+          <zeebe:input source="=false" target="followRedirects" />
+          <zeebe:input source="=20" target="connectionTimeoutInSeconds" />
+          <zeebe:input source="=20" target="readTimeoutInSeconds" />
+          <zeebe:input source="={&#10;  &#34;notificationChannel&#34;: &#34;ORDERCARE_ALERT&#34;,&#10;  &#34;recipientTier&#34;: recipientTier,&#10;  &#34;notificationType&#34;: notificationType,&#10;  &#34;notificationMessage&#34;: notificationMessage,&#10;  &#34;refundAmount&#34;: refundAmount&#10;}" target="body" />
+          <zeebe:input source="=false" target="ignoreNullValues" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="elementTemplateVersion" value="13" />
+          <zeebe:header key="elementTemplateId" value="io.camunda.connectors.HttpJson.v2" />
+          <zeebe:header key="resultVariable" value="childConnectorResp" />
+          <zeebe:header key="resultExpression" value="={&#10;  notificationDispatched: true,&#10;  notificationAckStatus: &#34;DELIVERED_200_OK&#34;&#10;}" />
+          <zeebe:header key="retryBackoff" value="PT0S" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_Child_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Child_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:endEvent id="End_ChildNotify" name="Notification&#10;Delivered">
+      <bpmn:incoming>Flow_Child_2</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_Child_1" sourceRef="Start_ChildNotify" targetRef="Task_DispatchNotification" />
+    <bpmn:sequenceFlow id="Flow_Child_2" sourceRef="Task_DispatchNotification" targetRef="End_ChildNotify" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Child">
+    <bpmndi:BPMNPlane id="BPMNPlane_Child" bpmnElement="Process_ChildNotification_PBL2">
+      <bpmndi:BPMNShape id="Start_ChildNotify_di" bpmnElement="Start_ChildNotify">
+        <dc:Bounds x="182" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="173" y="185" width="55" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_DispatchNotification_di" bpmnElement="Task_DispatchNotification">
+        <dc:Bounds x="280" y="120" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_ChildNotify_di" bpmnElement="End_ChildNotify">
+        <dc:Bounds x="472" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="463" y="185" width="55" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Child_1_di" bpmnElement="Flow_Child_1">
+        <di:waypoint x="218" y="160" />
+        <di:waypoint x="280" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Child_2_di" bpmnElement="Flow_Child_2">
+        <di:waypoint x="410" y="160" />
+        <di:waypoint x="472" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

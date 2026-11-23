@@ -1,0 +1,31 @@
+{
+  "components": [
+    {
+      "text": "### Warehouse Item Quality Inspection",
+      "type": "text",
+      "id": "Field_Header"
+    },
+    {
+      "label": "Inspection Passed (Approve Refund)?",
+      "type": "checkbox",
+      "id": "Field_InspectionPassed",
+      "key": "inspectionPassed",
+      "defaultValue": true
+    },
+    {
+      "label": "Inspector Remarks",
+      "type": "textfield",
+      "id": "Field_Remarks",
+      "key": "inspectorRemarks"
+    }
+  ],
+  "type": "default",
+  "id": "Form_WarehouseInspection",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.49.0"
+  },
+  "schemaVersion": 16
+}

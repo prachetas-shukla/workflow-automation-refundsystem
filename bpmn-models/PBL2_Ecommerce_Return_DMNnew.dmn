@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_ReturnPolicy_PBL2" name="Return Policy Rules PBL2" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.49.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <decision id="Decision_ReturnPolicy_PBL2" name="Return &#38; Refund Policy Routing">
+    <decisionTable id="DecisionTable_1" hitPolicy="FIRST">
+      <input id="Input_Days" label="Days Since Delivery">
+        <inputExpression id="InputExpr_Days" typeRef="number">
+          <text>daysSinceDelivery</text>
+        </inputExpression>
+      </input>
+      <input id="Input_Category" label="Product Category">
+        <inputExpression id="InputExpr_Category" typeRef="string">
+          <text>productCategory</text>
+        </inputExpression>
+      </input>
+      <input id="Input_Price" label="Item Price (INR)">
+        <inputExpression id="InputExpr_Price" typeRef="number">
+          <text>itemPrice</text>
+        </inputExpression>
+      </input>
+      <input id="Input_Trust" label="Customer Trust Tier">
+        <inputExpression id="InputExpr_Trust" typeRef="string">
+          <text>customerTier</text>
+        </inputExpression>
+      </input>
+      <output id="Output_Action" label="Refund Action" name="refundAction" typeRef="string" />
+      <output id="Output_Fee" label="Restocking Fee (%)" name="restockingFee" typeRef="number" />
+      <rule id="Rule_1">
+        <description>General: Past policy return window limit</description>
+        <inputEntry id="UnaryTests_1_1">
+          <text>&gt; 14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1_2">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1_3">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1_4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpr_1_1">
+          <text>"Reject"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpr_1_2">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_2">
+        <description>Examples: E-Books, Software Codes, Cosmetics, Perfumes</description>
+        <inputEntry id="UnaryTests_2_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_2_2">
+          <text>"Digital", "PersonalCare"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_2_3">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_2_4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpr_2_1">
+          <text>"Reject"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpr_2_2">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_3">
+        <description>Examples: USB Cables, Phone Cases, Stationery, Screen Protectors</description>
+        <inputEntry id="UnaryTests_3_1">
+          <text>&lt;= 14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_3_2">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_3_3">
+          <text>&lt;= 500</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_3_4">
+          <text>"Gold", "Platinum"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpr_3_1">
+          <text>"Instant-Refund"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpr_3_2">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_4">
+        <description>Examples: Laptops, Smartphones, Smartwatches, Headphones</description>
+        <inputEntry id="UnaryTests_4_1">
+          <text>&lt;= 14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_4_2">
+          <text>"Electronics"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_4_3">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_4_4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpr_4_1">
+          <text>"Warehouse-Inspection"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpr_4_2">
+          <text>5</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_5">
+        <description>Examples: Shirts, Dresses, Shoes, Sneakers, Jackets</description>
+        <inputEntry id="UnaryTests_5_1">
+          <text>&lt;= 14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_5_2">
+          <text>"Apparel", "Footwear"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_5_3">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_5_4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpr_5_1">
+          <text>"Warehouse-Inspection"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpr_5_2">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_6">
+        <description>Examples: Kitchen Utensils, Home Decor, Toys, Books</description>
+        <inputEntry id="UnaryTests_6_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_6_2">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_6_3">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_6_4">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpr_6_1">
+          <text>"Warehouse-Inspection"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpr_6_2">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_Decision_ReturnPolicy_PBL2" dmnElementRef="Decision_ReturnPolicy_PBL2">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,30 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: ordercare-refund-backend
+  datasource:
+    url: jdbc:h2:file:./data/ordercaredb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+camunda:
+  client:
+    mode: self-managed
+    zeebe:
+      enabled: true
+      grpc-address: ${ZEEBE_GRPC_ADDRESS:http://localhost:26500}
+      rest-address: ${ZEEBE_REST_ADDRESS:http://localhost:8080}
+      prefer-rest-over-grpc: false
+      security:
+        plaintext: true
